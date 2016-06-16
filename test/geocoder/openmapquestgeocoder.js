@@ -4,7 +4,7 @@
         expect = chai.expect,
         sinon = require('sinon');
 
-    var MapQuestGeocoder = require('../../lib/geocoder/mapquestgeocoder.js');
+    var MapQuestGeocoder = require('../../lib/geocoder/openmapquestgeocoder.js');
     var HttpAdapter = require('../../lib/httpadapter/httpadapter.js');
 
     var mockedHttpAdapter = {
@@ -17,12 +17,12 @@
 
             it('an http adapter must be set', function() {
 
-                expect(function() {new MapQuestGeocoder();}).to.throw(Error, 'MapQuestGeocoder need an httpAdapter');
+                expect(function() {new MapQuestGeocoder();}).to.throw(Error, 'OpenMapQuestGeocoder need an httpAdapter');
             });
 
             it('an apiKey must be set', function() {
 
-                expect(function() {new MapQuestGeocoder(mockedHttpAdapter);}).to.throw(Error, 'MapQuestGeocoder needs an apiKey');
+                expect(function() {new MapQuestGeocoder(mockedHttpAdapter);}).to.throw(Error, 'OpenMapQuestGeocoder needs an apiKey');
             });
 
             it('Should be an instance of MapQuestGeocoder', function() {
@@ -42,7 +42,7 @@
 
                 expect(function() {
                         mapquestAdapter.geocode('127.0.0.1');
-                }).to.throw(Error, 'MapQuestGeocoder does not support geocoding IPv4');
+                }).to.throw(Error, 'OpenMapQuestGeocoder does not support geocoding IPv4');
 
             });
 
@@ -52,23 +52,7 @@
 
                 expect(function() {
                         mapquestAdapter.geocode('2001:0db8:0000:85a3:0000:0000:ac1f:8001');
-                }).to.throw(Error, 'MapQuestGeocoder does not support geocoding IPv6');
-
-            });
-
-            it('Should call httpAdapter get method', function() {
-
-                var mock = sinon.mock(mockedHttpAdapter);
-                mock.expects('get').withArgs(
-                    'http://www.mapquestapi.com/geocoding/v1/address',
-                    { key: "API_KEY", location: "test" }
-                ).once().returns({then: function() {}});
-
-                var mapquestAdapter = new MapQuestGeocoder(mockedHttpAdapter, 'API_KEY');
-
-                mapquestAdapter.geocode('test');
-
-                mock.verify();
+                }).to.throw(Error, 'OpenMapQuestGeocoder does not support geocoding IPv6');
 
             });
 
